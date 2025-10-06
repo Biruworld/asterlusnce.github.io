@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Bapak!</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #0a0a0a;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Stage 1: Kanji in the middle */
+        .kanji-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            cursor: pointer;
+            transition: all 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 100;
+        }
+
+        .kanji {
+            font-size: 150px;
+            color: #fff;
+            text-shadow: 
+                0 0 20px rgba(255, 255, 255, 0.8),
+                0 0 40px rgba(102, 126, 234, 0.6),
+                0 0 60px rgba(118, 75, 162, 0.4);
+            animation: float 3s ease-in-out infinite, glow 2s ease-in-out infinite;
+            user-select: none;
+            font-weight: bold;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        @keyframes glow {
+            0%, 100% { 
+                text-shadow: 
+                    0 0 20px rgba(255, 255, 255, 0.8),
+                    0 0 40px rgba(102, 126, 234, 0.6),
+                    0 0 60px rgba(118, 75, 162, 0.4);
+            }
+            50% { 
+                text-shadow: 
+                    0 0 30px rgba(255, 255, 255, 1),
+                    0 0 60px rgba(102, 126, 234, 0.8),
+                    0 0 90px rgba(118, 75, 162, 0.6),
+                    0 0 120px rgba(240, 147, 251, 0.4);
+            }
+        }
+
+        .hint-text {
+            position: fixed;
+            bottom: 320px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 18px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.8; }
+        }
+
+        /* Stage 2: Expanding animation */
+        .kanji-container.expanding {
+            transform: translate(-50%, -50%) scale(20);
+            opacity: 0;
+        }
+
+        .kanji-container.expanding .kanji {
+            animation: none;
+        }
+
+        /* Stage 3: Birthday message */
+        .birthday-content {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            background: linear-gradient(135deg, #667eea 0%, #206fa3 50%, #112ed1 100%);
+            z-index: 50;
+        }
+
+        .birthday-content.visible {
+            opacity: 1;
+            pointer-events: auto;
+            animation: fadeIn 2s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .message-box {
+            max-width: 800px;
+            padding: 60px;
+            text-align: center;
+            animation: slideUp 1.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .birthday-title {
+            font-size: 5em;
+            color: #fff;
+            margin-bottom: 30px;
+            text-shadow: 
+                3px 3px 0px rgba(0, 0, 0, 0.2),
+                0 0 30px rgba(255, 255, 255, 0.5);
+            animation: titleBounce 1s ease-out 0.5s both;
+        }
+
+        @keyframes titleBounce {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .dad-text {
+            font-size: 4em;
+            color: #ffd700;
+            font-weight: bold;
+            margin-bottom: 40px;
+            text-shadow: 
+                2px 2px 0px rgba(0, 0, 0, 0.3),
+                0 0 20px rgba(255, 215, 0, 0.6);
+            animation: dadAppear 1s ease-out 1s both;
+        }
+
+        @keyframes dadAppear {
+            from {
+                opacity: 0;
+                transform: rotateX(90deg);
+            }
+            to {
+                opacity: 1;
+                transform: rotateX(0deg);
+            }
+        }
+
+        .message-text {
+            font-size: 1.8em;
+            color: #fff;
+            line-height: 1.8;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            animation: messageAppear 1s ease-out 1.5s both;
+        }
+
+        @keyframes messageAppear {
+            from {
+                opacity: 0;
+                filter: blur(10px);
+            }
+            to {
+                opacity: 1;
+                filter: blur(0px);
+            }
+        }
+
+        .emoji-decoration {
+            font-size: 3em;
+            margin: 30px 0;
+            animation: emojiSpin 1s ease-out 2s both;
+        }
+
+        @keyframes emojiSpin {
+            from {
+                opacity: 0;
+                transform: rotate(-180deg) scale(0);
+            }
+            to {
+                opacity: 1;
+                transform: rotate(0deg) scale(1);
+            }
+        }
+
+        /* Particle effects */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: particleFloat 4s infinite;
+        }
+
+        @keyframes particleFloat {
+            0% {
+                transform: translateY(0) translateX(0) scale(1);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(var(--drift, 0)) scale(0);
+                opacity: 0;
+            }
+        }
+
+        .confetti-piece {
+            position: fixed;
+            width: 12px;
+            height: 12px;
+            opacity: 0;
+            z-index: 200;
+        }
+
+        .confetti-piece.active {
+            animation: confettiFall 3s ease-out forwards;
+        }
+
+        @keyframes confettiFall {
+            0% {
+                opacity: 1;
+                transform: translateY(-50px) rotate(0deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(100vh) rotate(720deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+
+    <!-- Stage 1: Kanji -->
+    <div class="kanji-container" id="kanjiContainer">
+        <div class="kanji">愛</div>
+    </div>
+    <div class="hint-text" id="hintText">Klik Dimana saja!</div>
+
+    <!-- Stage 3: Birthday Message -->
+    <div class="birthday-content" id="birthdayContent">
+        <div class="message-box">
+            <div class="birthday-title">🎉Happy Birthday🎉</div>
+            <img src="" alt="">
+            <div class="dad-text">Bapak!</div>
+            <div class="emoji-decoration">🎂🎁🎈</div>
+            <div class="message-text">
+                Selamat ulang tahun pak<br>
+                Semoga cepet sembuh ya pak!<br>
+                Ingat selalu untuk optimis dan percaya diri ya pak!<br>
+                Pasti bisa! 💙
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const kanjiContainer = document.getElementById('kanjiContainer');
+        const birthdayContent = document.getElementById('birthdayContent');
+        const hintText = document.getElementById('hintText');
+        let clicked = false;
+
+        // Create floating particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.bottom = '0';
+                particle.style.animationDelay = Math.random() * 4 + 's';
+                particle.style.setProperty('--drift', (Math.random() - 0.5) * 200 + 'px');
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Create confetti explosion
+        function createConfetti() {
+            const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#ffa07a', '#98d8c8', '#f7dc6f', '#ffd700', '#ff69b4'];
+            
+            for (let i = 0; i < 150; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti-piece';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.top = '0';
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animationDelay = (Math.random() * 0.5) + 's';
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => confetti.classList.add('active'), 10);
+                    setTimeout(() => confetti.remove(), 3500);
+                }, i * 15);
+            }
+        }
+
+        // Main click handler
+        kanjiContainer.addEventListener('click', () => {
+            if (clicked) return;
+            clicked = true;
+
+            hintText.style.display = 'none';
+            
+            // Stage 2: Expand kanji
+            kanjiContainer.classList.add('expanding');
+            
+            // Stage 3: Show birthday message
+            setTimeout(() => {
+                birthdayContent.classList.add('visible');
+                createConfetti();
+            }, 1500);
+        });
+
+        // Initialize
+        createParticles();
+    </script>
+</body>
+</html>
